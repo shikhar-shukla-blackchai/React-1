@@ -15,11 +15,6 @@ const Header = () => {
       </div>
       <div className="nav-items">
         <ul className="flex ecimal text-2xl p-4 m-4">
-          <li className="p-4">Home</li>
-          <li className="p-4">About Us</li>
-          <li className="p-4">Contact Us</li>
-          <li className="p-4">Cart</li>
-
           <li className="p-4">
             <Link to={"/"}>Home</Link>
           </li>
