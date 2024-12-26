@@ -1,12 +1,16 @@
-import RestaurantCard from "./RestaurantCard";
-import { useState, useEffect } from "react";
+import RestaurantCard, { withPromotedLabel } from "./RestaurantCard";
+import { useState, useEffect, useContext } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const Body = () => {
   const [listOfRestaurent, setListOfRestaurent] = useState([]);
   const [filteredRestaurent, setFilteredRestaurent] = useState([]);
-  const [searchText, setSearchText] = useState([]);
+  const [searchText, setSearchText] = useState("");
+
+  const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
 
   useEffect(() => {
     fetchData();
@@ -25,17 +29,24 @@ const Body = () => {
       json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
   };
+  console.log(listOfRestaurent);
+
+  const onlineStatus = useOnlineStatus();
+
+  if (onlineStatus === false) return <h1>Please check your internet</h1>;
+
+  const { loggedInUser, setUserName } = useContext(UserContext);
 
   return listOfRestaurent.length === 0 ? (
     <Shimmer />
   ) : (
-    <div className="body">
+    <div className=" bg-zinc-100 pt-1 h-auto w-auto pl-2">
       <div className="search p-4 mt-4 flex">
         <div className="mx-4">
           <input
             type="text"
             value={searchText}
-            className="border border-black"
+            className="border border-black rounded-2xl h-8"
             onChange={(e) => {
               setSearchText(e.target.value);
             }}
@@ -55,7 +66,7 @@ const Body = () => {
         </div>
 
         <button
-          className="bg-gray-300 rounded-2xl border border-blue-500 p-1"
+          className="bg-black rounded-2xl text-white border border-blue-500 p-1 "
           onClick={() => {
             const filteredList = listOfRestaurent.filter(
               (res) => res.info.avgRating && Number(res.info.avgRating) > 4.1
@@ -65,6 +76,14 @@ const Body = () => {
         >
           Top Rated Restaurent
         </button>
+        <div>
+          <label className=" ml-8">User Name: </label>
+          <input
+            className="border border-black ml-1"
+            value={loggedInUser}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+        </div>
       </div>
       <div className="res-container flex flex-wrap">
         {filteredRestaurent.map((restaurent) => (
@@ -72,7 +91,11 @@ const Body = () => {
             to={"/restaurants/" + restaurent?.info?.id}
             key={restaurent?.info?.id}
           >
-            <RestaurantCard resData={restaurent} />
+            {restaurent?.info?.aggregatedDiscountInfoV3 ? (
+              <RestaurantCardPromoted resData={restaurent} />
+            ) : (
+              <RestaurantCard resData={restaurent} />
+            )}
           </Link>
         ))}
       </div>

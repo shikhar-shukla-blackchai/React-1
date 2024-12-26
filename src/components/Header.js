@@ -1,20 +1,24 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { LOGO_URL } from "../utils/Constants";
-
+import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 import { Link } from "react-router-dom";
 
 const Header = () => {
   const [btnName, setBtnName] = useState("login");
 
-  console.log("header");
-
+  const { loggedInUser } = useContext(UserContext);
+  const onlineStatus = useOnlineStatus();
   return (
-    <div className="header flex justify-between border ">
+    <div className="header flex justify-between border bg-black   text-white border-black">
       <div className="logo-container">
-        <img className="logo w-40" src={LOGO_URL} />
+        <img className="logo w-44 " src={LOGO_URL} />
       </div>
       <div className="nav-items">
-        <ul className="flex ecimal text-2xl p-4 m-4">
+        <ul className="flex ecimal text-2xl p-4 m-9">
+          <li className="align-middle mt-4">
+            Online Status:{onlineStatus ? "🟢" : "🔴"}
+          </li>
           <li className="p-4">
             <Link to={"/"}>Home</Link>
           </li>
@@ -27,6 +31,9 @@ const Header = () => {
           <li className="p-4">
             <Link>Cart</Link>
           </li>
+          <li className="p-4">
+            <Link to={"/grocery"}>Grocery</Link>
+          </li>
 
           <button
             className="bg-black text-white text-sm px-4 h-6 inline-block align-middle mt-[23] rounded-xl border border-blue-700"
@@ -36,6 +43,7 @@ const Header = () => {
           >
             {btnName}
           </button>
+          <li className="p-4 text-base mt-2">{loggedInUser}</li>
         </ul>
       </div>
     </div>

@@ -1,60 +1,48 @@
 import Shimmer from "./Shimmer";
-import { MENU_IP } from "../utils/Constants";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import useRestaurantMenu from "../utils/useRestaurantMenu";
+import RestaurantCategory from "./RestaurentCatagoriy";
+import { useState } from "react";
 
 const RestaurantMenu = () => {
-  const [resInfo, setResInfo] = useState(null);
-
-  useEffect(() => {
-    fetchMenu();
-  }, []);
-
   const { resId } = useParams();
 
-  const fetchMenu = async () => {
-    const data = await fetch(MENU_IP + resId);
-    const json = await data.json();
+  const resInfo = useRestaurantMenu(resId);
 
-    setResInfo(json);
-    console.log(json);
-  };
+  const [showIndex, setShowIndex] = useState(0);
 
   if (resInfo === null) return <Shimmer />;
 
   const { name, costForTwoMessage, cuisines } =
     resInfo?.data?.cards[2]?.card?.card?.info;
 
-  let { itemCards } = resInfo?.data?.cards[4]?.groupedCard?.cardGroupMap
-    ?.REGULAR?.cards[2]?.card?.card
-    ? resInfo?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]
-        ?.card?.card
-    : resInfo?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]
-        ?.card?.card?.categories[0];
+  const categories =
+    resInfo?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR.cards.filter(
+      (c) =>
+        c.card.card?.["@type"] ===
+        "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
+    );
+
+  console.log("categories", categories);
 
   return (
-    <div className="p-4 m-4">
-      <h1 className="font-bold text-2xl ">{name}</h1>
-      <h2 className="p-1 ">
-        - {cuisines.join(", ")}
-        <span className="font-semibold"> - {costForTwoMessage}</span>{" "}
+    <div className="text-center bg-zinc-100 -mt-10">
+      <h1 className="font-extrabold  text-2xl my-10 py-4">{name}</h1>
+      <h2 className=" text-lg font-bold mb-4 -mt-2  ">
+        {cuisines.join(", ")}
+        <span className="font-bold"> - {costForTwoMessage}</span>
       </h2>
       <div>
-        <h2 className="font-bold text-2xl py-2 ">Menu</h2>
-        <ul className="">
-          {itemCards.map((item) => {
-            return (
-              <li key={item.card.info.id}>
-                - {item?.card?.info?.name}
-                {" ₹"}
-                <span className="font-semibold">
-                  {item?.card?.info?.defaultPrice / 100 ||
-                    item?.card?.info?.price / 100}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
+        {categories.map((category, index) => (
+          <RestaurantCategory
+            key={category.card.card.title}
+            data={category?.card?.card}
+            showItem={index === showIndex}
+            setShowIndex={() =>
+              setShowIndex(showIndex === index ? null : index)
+            }
+          />
+        ))}
       </div>
     </div>
   );

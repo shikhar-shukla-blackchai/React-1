@@ -7,7 +7,7 @@ const User = ({ name }) => {
   useEffect(() => {
     console.log("useEffect()");
     return () => {
-      console.log("useEffect Return / ComponentWillUnmount(");
+      console.log("useEffect Return / ComponentWillUnmount()");
     };
   });
 
