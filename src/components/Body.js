@@ -22,14 +22,12 @@ const Body = () => {
     );
     const json = await data.json();
 
-    setListOfRestaurent(
-      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
-    );
-    setFilteredRestaurent(
-      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
-    );
+    const restaurants =
+      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
+        ?.restaurants;
+    setFilteredRestaurent(restaurants);
+    setListOfRestaurent(restaurants);
   };
-  console.log(listOfRestaurent);
 
   const onlineStatus = useOnlineStatus();
 
@@ -37,9 +35,8 @@ const Body = () => {
 
   const { loggedInUser, setUserName } = useContext(UserContext);
 
-  return listOfRestaurent.length === 0 ? (
-    <Shimmer />
-  ) : (
+  if (listOfRestaurent.length === 0) <Shimmer />;
+  return (
     <div className=" bg-zinc-100 pt-1 h-auto w-auto pl-2">
       <div className="search p-4 mt-4 flex">
         <div className="mx-4">
@@ -56,7 +53,7 @@ const Body = () => {
             className="bg-black rounded-2xl text-white border border-blue-500 p-1 ml-2"
             onClick={() => {
               const filteredList = listOfRestaurent.filter((res) =>
-                res.info.name.toLowerCase().includes(searchText.toLowerCase())
+                res.info.name?.toLowerCase().includes(searchText.toLowerCase())
               );
               setFilteredRestaurent(filteredList); // Update filtered list
             }}
@@ -69,7 +66,10 @@ const Body = () => {
           className="bg-black rounded-2xl text-white border border-blue-500 p-1 "
           onClick={() => {
             const filteredList = listOfRestaurent.filter(
-              (res) => res.info.avgRating && Number(res.info.avgRating) > 4.1
+              (res) =>
+                res.info.avgRating &&
+                !NaN(res.info.avgRating) &&
+                Number(res.info.avgRating) > 4.1
             );
             setFilteredRestaurent(filteredList);
           }}

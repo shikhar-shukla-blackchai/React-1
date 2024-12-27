@@ -1,13 +1,21 @@
 import { useState } from "react";
 import { CDN_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { addItem } from "../utils/cartSlice";
 
 const ItemList = ({ items }) => {
   console.log("items", items);
 
   const [more, setMore] = useState(false);
 
+  const dispatch = useDispatch();
+
   const showMore = () => {
     setMore(!more);
+  };
+
+  const handleAddItem = (items) => {
+    dispatch(addItem(items));
   };
 
   return (
@@ -49,7 +57,10 @@ const ItemList = ({ items }) => {
           </div>{" "}
           <div className="w-3/12 p-4">
             <div className="absolute">
-              <button className="h-11 w-36 ml-7 mt-[118] rounded-md  text-green-600 bg-white text-lg font-bold">
+              <button
+                className="h-11 w-36 ml-7 mt-[118] rounded-md  text-green-600 bg-white text-lg font-bold"
+                onClick={() => handleAddItem(items)}
+              >
                 ADD
               </button>{" "}
             </div>
