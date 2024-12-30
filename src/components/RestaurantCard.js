@@ -7,9 +7,11 @@ const RestaurantCard = (props) => {
   const { name, cuisines, costForTwo, avgRating, sla } = resData?.info;
 
   const { loggedInUser } = useContext(UserContext);
-
   return (
-    <div className="res-card bg-zinc-100 m-4 ml-2 mb-4  w-[300] h-[475]  cursor-pointer rounded-xl rounded-t-3xl hover:bg-white hover:border-white black hover:border">
+    <div
+      data-testId="resCard"
+      className="res-card bg-zinc-100 m-4 ml-2 mb-4  w-[300] h-[475]  cursor-pointer rounded-xl rounded-t-3xl hover:bg-white hover:border-white black hover:border"
+    >
       <img
         className="res-logo w-[300] hover:border  h-[270]   hover:border-white rounded-3xl "
         src={CDN_URL + resData?.info?.cloudinaryImageId}

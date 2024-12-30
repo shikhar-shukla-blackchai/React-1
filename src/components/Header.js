@@ -6,14 +6,13 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Header = () => {
-  const [btnName, setBtnName] = useState("login");
+  const [btnName, setBtnName] = useState("Login");
 
   const onlineStatus = useOnlineStatus();
 
   const { loggedInUser } = useContext(UserContext);
 
   const cartItems = useSelector((store) => store.cart.items);
-  console.log("cartItems", cartItems);
 
   return (
     <div className="header flex justify-between border bg-black   text-white border-black">
@@ -44,7 +43,7 @@ const Header = () => {
           <button
             className="bg-black text-white text-sm px-4 h-6 inline-block align-middle mt-[23] rounded-xl border border-blue-700"
             onClick={() => {
-              btnName === "login" ? setBtnName("logout") : setBtnName("login");
+              btnName === "Login" ? setBtnName("Logout") : setBtnName("Login");
             }}
           >
             {btnName}

@@ -35,13 +35,15 @@ const Body = () => {
 
   const { loggedInUser, setUserName } = useContext(UserContext);
 
-  if (listOfRestaurent.length === 0) <Shimmer />;
-  return (
+  return listOfRestaurent.length === 0 ? (
+    <Shimmer />
+  ) : (
     <div className=" bg-zinc-100 pt-1 h-auto w-auto pl-2">
       <div className="search p-4 mt-4 flex">
         <div className="mx-4">
           <input
             type="text"
+            data-testid="searchInput"
             value={searchText}
             className="border border-black rounded-2xl h-8"
             onChange={(e) => {
@@ -66,10 +68,7 @@ const Body = () => {
           className="bg-black rounded-2xl text-white border border-blue-500 p-1 "
           onClick={() => {
             const filteredList = listOfRestaurent.filter(
-              (res) =>
-                res.info.avgRating &&
-                !NaN(res.info.avgRating) &&
-                Number(res.info.avgRating) > 4.1
+              (res) => res.info.avgRating && Number(res.info.avgRating) > 4.1
             );
             setFilteredRestaurent(filteredList);
           }}
