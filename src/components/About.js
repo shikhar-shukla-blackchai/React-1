@@ -9,9 +9,19 @@ class About extends Component {
 
   render() {
     return (
-      <div className="mt-10">
+      <div
+        className="
+      "
+      >
         <h1>About US</h1>
         <h2>This is Namaste React WEB serease</h2>
+        <h3>
+          Netflix GPT:{" "}
+          <span className="text-blue-600">
+            {" "}
+            https://netflix-gpt-w3tu.onrender.com/browse
+          </span>
+        </h3>
         <h3>
           Logged-In User:{" "}
           <UserContext.Consumer>

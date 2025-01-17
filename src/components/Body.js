@@ -6,8 +6,8 @@ import useOnlineStatus from "../utils/useOnlineStatus";
 import UserContext from "../utils/UserContext";
 
 const Body = () => {
-  const [listOfRestaurent, setListOfRestaurent] = useState([]);
-  const [filteredRestaurent, setFilteredRestaurent] = useState([]);
+  const [listOfRestaurants, setListOfRestaurants] = useState([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchText, setSearchText] = useState("");
 
   const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
@@ -17,88 +17,104 @@ const Body = () => {
   }, []);
 
   const fetchData = async () => {
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.7040592&lng=77.10249019999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-    );
-    const json = await data.json();
+    try {
+      const EDUCORS_URL = "https://educorssolver.host/api/getData";
+      const targetUrl =
+        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.7040592&lng=77.10249019999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"; // Replace with your target URL
+      const apiKey = process.env.REACT_APP_KEY_CORS; // Replace with your actual API key
+      const data = await fetch(
+        `${EDUCORS_URL}?ApiKey=${apiKey}&Target=${encodeURIComponent(
+          targetUrl
+        )}`
+      );
+      const json = await data.json();
 
-    const restaurants =
-      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants;
-    setFilteredRestaurent(restaurants);
-    setListOfRestaurent(restaurants);
+      const restaurants =
+        json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
+          ?.restaurants;
+      setFilteredRestaurants(restaurants);
+      setListOfRestaurants(restaurants);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const onlineStatus = useOnlineStatus();
 
-  if (onlineStatus === false) return <h1>Please check your internet</h1>;
+  if (onlineStatus === false) {
+    return (
+      <div className="bg-gray-100 p-4 text-center">
+        <h1>Please check your internet connection.</h1>
+      </div>
+    );
+  }
 
   const { loggedInUser, setUserName } = useContext(UserContext);
 
-  return listOfRestaurent.length === 0 ? (
+  return listOfRestaurants.length === 0 ? (
     <Shimmer />
   ) : (
-    <div className=" bg-zinc-100 pt-1 h-auto w-auto pl-2">
-      <div className="search p-4 mt-4 flex">
-        <div className="mx-4">
+    <div className="bg-gray-100 p-4 ">
+      <div className="search flex justify-between items-center mb-4">
+        <div className="relative w-full max-w-md">
           <input
             type="text"
             data-testid="searchInput"
             value={searchText}
-            className="border border-black rounded-2xl h-8"
-            onChange={(e) => {
-              setSearchText(e.target.value);
-            }}
+            onChange={(e) => setSearchText(e.target.value)}
+            placeholder="Search Restaurants"
+            className="w-60 rounded-l-md pl-10 pr-4 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500"
           />
-
           <button
-            className="bg-black rounded-2xl text-white border border-blue-500 p-1 ml-2"
+            className="absolute px-2 h-[2.6rem] bg-orange-500 text-white rounded-r-md hover:bg-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-500"
             onClick={() => {
-              const filteredList = listOfRestaurent.filter((res) =>
+              const filteredList = listOfRestaurants.filter((res) =>
                 res.info.name?.toLowerCase().includes(searchText.toLowerCase())
               );
-              setFilteredRestaurent(filteredList); // Update filtered list
+              setFilteredRestaurants(filteredList);
             }}
           >
             Search
           </button>
         </div>
-
         <button
-          className="bg-black rounded-2xl text-white border border-blue-500 p-1 "
+          className="bg-orange-500 text-white rounded-md py-2 px-4 hover:bg-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-500"
           onClick={() => {
-            const filteredList = listOfRestaurent.filter(
+            const filteredList = listOfRestaurants.filter(
               (res) => res.info.avgRating && Number(res.info.avgRating) > 4.1
             );
-            setFilteredRestaurent(filteredList);
+            setFilteredRestaurants(filteredList);
           }}
         >
-          Top Rated Restaurent
+          Top Rated
         </button>
-        <div>
-          <label className=" ml-8">User Name: </label>
-          <input
-            className="border border-black ml-1"
-            value={loggedInUser}
-            onChange={(e) => setUserName(e.target.value)}
-          />
-        </div>
       </div>
-      <div className="res-container flex flex-wrap">
-        {filteredRestaurent.map((restaurent) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {filteredRestaurants.map((restaurant) => (
           <Link
-            to={"/restaurants/" + restaurent?.info?.id}
-            key={restaurent?.info?.id}
+            to={`/restaurants/${restaurant?.info?.id}`}
+            key={restaurant?.info?.id}
+            className="rounded-md overflow-hidden shadow-sm"
           >
-            {restaurent?.info?.aggregatedDiscountInfoV3 ? (
-              <RestaurantCardPromoted resData={restaurent} />
+            {restaurant?.info?.aggregatedDiscountInfoV3 ? (
+              <RestaurantCardPromoted resData={restaurant} />
             ) : (
-              <RestaurantCard resData={restaurent} />
+              <RestaurantCard resData={restaurant} />
             )}
           </Link>
         ))}
       </div>
+      <div className="flex justify-end mt-4">
+        <label className="text-sm mr-2">User Name: </label>
+        <input
+          type="text"
+          value={loggedInUser}
+          onChange={(e) => setUserName(e.target.value)}
+          className="rounded-md border border-gray-300 py-2 px-3 focus:outline-none focus:ring-1 focus:ring-orange-500"
+        />
+      </div>
     </div>
   );
 };
+
 export default Body;

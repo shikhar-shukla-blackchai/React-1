@@ -2,24 +2,31 @@ import ItemList from "./ItemList";
 
 const RestaurantCategory = ({ data, showItem, setShowIndex }) => {
   const handleClick = () => {
-    console.log("showItem", showItem);
-    setShowIndex();
+    setShowIndex(showItem ? null : 0); // Set showIndex to 0 when expanding
   };
 
   return (
-    <div className="bg-zinc-100">
-      <div className="w-6/12 mx-auto my-4 bg-gray-200  ">
-        <div className=" flex justify-between " onClick={handleClick}>
-          <span className="font-bold text-2xl pl-3 cursor-pointer ">
+    <div className="mb-4 mt-26">
+      <div
+        className={`border border-gray-200 rounded-md p-2 cursor-pointer ${
+          showItem ? "bg-gray-100" : ""
+        }`}
+        onClick={handleClick}
+      >
+        <div className="flex justify-between items-center">
+          <span className="font-bold text-lg">
             {data.title} ({data.itemCards.length || 0})
           </span>
-          <span className="pr-3 pt-2">{showItem ? "▲" : "▼"}</span>{" "}
-        </div>
-        <div className="ml-3 ">
-          {showItem && <ItemList items={data.itemCards} />}
+          <span className="text-sm">{showItem ? "▲" : "▼"}</span>
         </div>
       </div>
+      {showItem && (
+        <div className="mt-2">
+          <ItemList items={data.itemCards} />
+        </div>
+      )}
     </div>
   );
 };
+
 export default RestaurantCategory;

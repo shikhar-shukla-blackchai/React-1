@@ -1,24 +1,40 @@
 import { useEffect, useState } from "react";
 
 const User = ({ name }) => {
-  const [count, setCount] = useState(0);
-  const [count2, setCount2] = useState(2);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
-    console.log("useEffect()");
-    return () => {
-      console.log("useEffect Return / ComponentWillUnmount()");
+    // Simulate fetching user data from an API (replace with actual API call)
+    const fetchData = async () => {
+      const response = await fetch("https://api.example.com/users/1"); // Replace with your API endpoint
+      const userData = await response.json();
+      setUser(userData);
     };
-  });
+    fetchData();
+  }, []);
 
-  console.log("render");
   return (
-    <div className="border border-black p-2 m-4">
-      <h1>Count: {count}</h1>
-      <h1>Count: {count2}</h1>
-      <h2>Name: {name}</h2>
-      <h3>Loaction: India, Gujarat </h3>
-      <h4>Contact: shikharshukla678@gmail.com </h4>
+    <div className="container mx-auto p-4 bg-white rounded-lg shadow-md mt-26">
+      <h1 className="text-2xl font-bold text-center mb-4">User Profile</h1>
+      {user.name ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col space-y-2">
+            <p className="text-gray-700 font-medium">Name:</p>
+            <p className="text-gray-500">{user.name}</p>
+            <p className="text-gray-700 font-medium">Email:</p>
+            <p className="text-gray-500">{user.email || "N/A"}</p>
+            <p className="text-gray-700 font-medium">Location:</p>
+            <p className="text-gray-500">{user.location || "N/A"}</p>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <p className="text-gray-700 font-medium">Contact:</p>
+            <p className="text-gray-500">{user.contact || "N/A"}</p>
+            {/* Add more user details if available */}
+          </div>
+        </div>
+      ) : (
+        <p className="text-center text-gray-500">Loading user data...</p>
+      )}
     </div>
   );
 };
