@@ -21,7 +21,7 @@ const Body = () => {
       const EDUCORS_URL = "https://educorssolver.host/api/getData";
       const targetUrl =
         "https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.7040592&lng=77.10249019999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"; // Replace with your target URL
-      const apiKey = process.env.REACT_APP_KEY_CORS; // Replace with your actual API key
+      const apiKey = "56738e5abc395a55"; // Replace with your actual API key
       const data = await fetch(
         `${EDUCORS_URL}?ApiKey=${apiKey}&Target=${encodeURIComponent(
           targetUrl
