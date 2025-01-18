@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { LOGO_URL } from "../utils/Constants";
+import { LOGO_URL } from "../utils/constants";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import UserContext from "../utils/UserContext";
 import { Link } from "react-router-dom";
