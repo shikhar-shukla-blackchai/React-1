@@ -1,12 +1,13 @@
 {
   "name": "react-1",
   "version": "1.0.0",
-  "description": "This is a Namaste React ",
+  "description": "This is a Namaste React",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html",
+    "build": "cross-env NODE_ENV=production parcel build index.html",
     "test": "jest",
-    "watch-test": "jest --watch"
+    "watch-test": "jest --watch",
+    "clear-cache": "rm -rf .parcel-cache"
   },
   "repository": {
     "type": "git",
@@ -15,7 +16,7 @@
   "keywords": [
     "React"
   ],
-  "author": "Shikhar shukla",
+  "author": "Shikhar Shukla",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/shikhar-shukla-blackchai/React-1/issues"
@@ -29,10 +30,9 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "babel-jest": "^29.7.0",
-    "i": "^0.3.7",
+    "cross-env": "^7.0.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "npm": "^11.0.0",
     "parcel": "^2.13.2",
     "postcss": "^8.4.49",
     "process": "^0.11.10",
