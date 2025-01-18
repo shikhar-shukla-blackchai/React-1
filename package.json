@@ -4,7 +4,7 @@
   "description": "This is a Namaste React ",
   "scripts": {
     "start": "parcel index.html",
-    "build": "cross-env NODE_ENV=production parcel build index.html",
+    "build": "parcel build index.html",
     "test": "jest",
     "watch-test": "jest --watch"
   },
@@ -29,7 +29,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "babel-jest": "^29.7.0",
-    "cross-env": "^7.0.3",
+    "i": "^0.3.7",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "npm": "^11.0.0",
@@ -47,18 +47,5 @@
   },
   "browserslist": [
     "last 2 versions"
-  ],
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
-    ],
-    "env": {
-      "development": {
-        "plugins": [
-          "react-refresh/babel"
-        ]
-      }
-    }
-  }
+  ]
 }
